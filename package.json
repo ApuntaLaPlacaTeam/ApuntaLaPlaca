@@ -1,33 +1,39 @@
 {
-  "name": "apuntalaplaca",
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "wikiredes",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "eject": "expo eject",
-    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
-  },
-  "jest": {
-    "preset": "jest-expo"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "clean": "cd android && gradlew.bat clean",
+    "cleanlinux": "cd android && ./gradlew clean",
+    "buildRelease": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
-    "@expo/samples": "2.1.1",
-    "expo": "^30.0.1",
-    "react": "16.3.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
+    "@babel/runtime": "7.0.0-beta.55",
+    "fetchival": "^0.3.3",
+    "react": "16.5.0",
+    "react-moment": "^0.8.1",
+    "react-native": "0.57.1",
+    "react-native-image-picker": "^0.27.0",
+    "react-native-linear-gradient": "^2.4.2",
+    "react-native-paper": "^2.0.1",
+    "react-native-vector-icons": "^5.0.0",
     "react-navigation": "^2.16.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-persist": "^5.10.0",
     "redux-persist-transform-filter": "^0.0.18",
     "redux-thunk": "^2.3.0",
-    "fetchival": "^0.3.3",
-    "react-moment": "^0.8.1",
-    "react-native-paper": "^2.0.1"
+    "wiki-entity": "^0.4.1"
   },
   "devDependencies": {
-    "jest-expo": "30.0.0"
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "0.46.0",
+    "react-test-renderer": "16.5.0"
+  },
+  "jest": {
+    "preset": "react-native"
   }
 }
