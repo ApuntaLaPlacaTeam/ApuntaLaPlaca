@@ -15,7 +15,8 @@ import {
   DefaultTheme,
   TextInput,
   HelperText,
-  withTheme
+  withTheme,
+  Button
 } from "react-native-paper";
 import { PermissionsAndroid } from "react-native";
 
@@ -29,7 +30,7 @@ const theme = {
   }
 };
 
-export default class CapturaInfractor extends Component {
+class CapturaInfractor extends Component {
   constructor(props) {
     super(props);
 
@@ -37,6 +38,79 @@ export default class CapturaInfractor extends Component {
       avatarSource: null,
       description: ""
     };
+    this.sendPhoto = this.sendPhoto.bind(this);
+  }
+
+  sendPhoto() {
+    let form = new FormData();
+    form.append("photo", {
+      uri: this.state.avatarSource.imageSource,
+      type: this.state.avatarSource.imageType,
+      name: this.state.avatarSource.imageName
+    });
+    fetch(`https://platerecognition.maytok.com/upload`, {
+      method: "POST",
+      headers: {},
+      body: form
+    })
+      .then(response => {
+        console.log("response: ", response);
+        return response.json();
+      })
+      .then(responseJson => {
+        console.log("responseJson: ", responseJson);
+
+        if (!responseJson.error) {
+          let form2 = {
+            dniDenunciante: "48342427",
+            descripcion: this.state.description,
+            placaDeRodaje: responseJson.message,
+            ubicacion: { lat: -6.7726327, long: -79.8360752 },
+            linkFoto: `https://platerecognition.maytok.com/static/img/photos/${
+              responseJson.filename
+            }`
+          };
+
+          fetch(
+            `https://apunta-la-placa-backend.herokuapp.com/api/guardar-infraccion`,
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json"
+              },
+              body: JSON.stringify(form2)
+            }
+          )
+            .then(response => {
+              console.log("response 2: ", response);
+              return response.json();
+            })
+            .then(responseJson2 => {
+              console.log("responseJson 2: ", responseJson2);
+              //Alert.alert(JSON.parse(responseJson));
+              //this.props.navigation.goBack();
+            })
+            .catch(error => {
+              console.log("ERror: 2", error);
+              //        Alert.alert(JSON.parse(error));
+            });
+        } else {
+          this.setState({
+            avatarSource: null
+          });
+          Alert.alert("Error en subir la foto, intento nuevamente");
+        }
+
+        //Alert.alert(JSON.parse(responseJson));
+        //this.props.navigation.goBack();
+      })
+      .catch(error => {
+        Alert.alert("Error en subir la foto, intento nuevamente");
+        console.log("ERror: ", error);
+        this.setState({
+          avatarSource: null
+        }); //        Alert.alert(JSON.parse(error));
+      });
   }
 
   render() {
@@ -61,7 +135,7 @@ export default class CapturaInfractor extends Component {
                 justifyContent: "center"
               }}>
               {this.state.avatarSource ? (
-                <View>
+                <View style={{ backgroundColor: "white", borderRadius: 5 }}>
                   <Image
                     style={styles.imageResult}
                     source={{ uri: this.state.avatarSource.imageUri }}
@@ -77,6 +151,9 @@ export default class CapturaInfractor extends Component {
                         this.setState({ description })
                       }
                     />
+                    <Button onPress={this.sendPhoto} style={styles.button}>
+                      Enviar
+                    </Button>
                   </View>
                 </View>
               ) : (
@@ -85,15 +162,15 @@ export default class CapturaInfractor extends Component {
                     const ImagePicker = require("react-native-image-picker");
 
                     var options = {
-                      title: "Select an image",
+                      title: "Selecciona una imagen",
                       storageOptions: {
                         skipBackup: true,
                         path: "images",
                         waitUntilSaved: true
                       },
                       mediaType: "photo",
-                      allowsEditing: true,
-                      quality: 0.5
+                      allowsEditing: false,
+                      quality: 0.1
                     };
 
                     /**
@@ -189,6 +266,8 @@ const styles = StyleSheet.create({
     color: "white"
   },
   inputContainerStyle: {
-    margin: 8,
+    margin: 8
   }
 });
+
+export default withTheme(CapturaInfractor);
