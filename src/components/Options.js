@@ -70,13 +70,17 @@ export default class Options extends Component {
                     source={require("../img/map.png")}
                   />
                 </View>
-                <View style={styles.itemMenu}>
+                <TouchableOpacity
+                  style={styles.itemMenu}
+                  onPress={() => {
+                    navigate("Mis denuncias");
+                  }}>
                   <Image
                     style={styles.itemMenuImage}
                     source={require("../img/resume.png")}
                   />
                   <Text style={styles.itemMenuText}>MIS DENUNCIA</Text>
-                </View>
+                </TouchableOpacity>
               </View>
               <View style={styles.itemMenu}>
                 <Text style={[styles.itemMenuText, styles.footer]}>

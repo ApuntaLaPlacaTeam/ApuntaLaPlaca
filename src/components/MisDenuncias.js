@@ -6,7 +6,8 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  Alert
+  Alert,
+  ScrollView
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import {
@@ -83,25 +84,25 @@ class MisDenuncias extends Component {
           <LinearGradient
             colors={["#000626", "#29346C"]}
             style={{ flex: 1, flexDirection: "column" }}>
-            <View
+            <ScrollView
               style={{
-                flex: 1,
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center"
+                flex: 1
               }}>
               {this.state.denuncias.map(item => {
                 return (
-                  <Card key={item._id}>
+                  <Card key={item._id} style={{ marginBottom: 10 }}>
                     <Card.Content>
                       <Title>Denuncia</Title>
-                      <Paragraph>{item.descripcion} {'\n'} DNI Denunciante: {item.dniDenunciante}</Paragraph>
+                      <Paragraph>
+                        {item.descripcion} {"\n"} DNI Denunciante:{" "}
+                        {item.dniDenunciante}
+                      </Paragraph>
                     </Card.Content>
                     <Card.Cover source={{ uri: item.linkFoto }} />
                   </Card>
                 );
               })}
-            </View>
+            </ScrollView>
           </LinearGradient>
         </View>
       </PaperProvider>
